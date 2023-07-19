@@ -44,7 +44,6 @@ jobs:
         if: always()
         uses: docker://morphy/revive-action:v2
         with:
-          config: config.toml
           path: "./..."
 
       - name: Run Gosec Security Scanner
