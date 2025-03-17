@@ -66,3 +66,27 @@ func assertPanic(t *testing.T, reason string, f func()) {
 	}()
 	f()
 }
+
+func TestDefault(t *testing.T) {
+
+	const DefaultedVar = "TEST_ENV_VAR_DFLT"
+
+	v := NewDefault(DefaultedVar, "default-value")
+	if v.Name() != DefaultedVar {
+		t.Error("Failed to get env var name")
+	}
+
+	if v.Default() != "default-value" {
+		t.Error("Failed to get env var default")
+	}
+
+	if v.Value() != "default-value" {
+		t.Error("Failed to get env var value")
+	}
+
+	_ = os.Setenv(DefaultedVar, "6969")
+
+	if v.Value() != "6969" {
+		t.Error("Failed to get env var value")
+	}
+}

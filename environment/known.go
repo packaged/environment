@@ -35,3 +35,16 @@ func (v Name) ValueOrPanic() string {
 	}
 	panic(fmt.Sprintf("environment variable [%s] not set", v.String()))
 }
+
+type Var struct {
+	name         string
+	defaultValue string
+}
+
+func NewDefault(name, defaultValue string) Var {
+	return Var{name: name, defaultValue: defaultValue}
+}
+
+func (v Var) Name() string    { return v.name }
+func (v Var) Default() string { return v.defaultValue }
+func (v Var) Value() string   { return Variable(v.name, v.defaultValue) }
