@@ -11,17 +11,17 @@ jobs:
       GO111MODULE: on
     steps:
       - name: Checkout Source
-        uses: actions/checkout@v2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Set up Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
-          go-version: '1.20'
+          go-version-file: go.mod
 
-      - name: WriteGoList
-        run: go list -json -m all > go.list
       - name: DependencyVulnerabilityScan
-        uses: sonatype-nexus-community/nancy-github-action@main
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck@v1.9.0
+          govulncheck ./...
 
       - name: Go Mod Vendor
         run: go mod vendor
@@ -42,12 +42,12 @@ jobs:
 
       - name: Run Revive Action by pulling pre-built image
         if: always()
-        uses: docker://morphy/revive-action:v2
+        uses: docker://morphy/revive-action@sha256:1ec5904abc4d8b2cd5fbb2987fc79a227f21a4231d757cc9a09a9ee3ab3c328b # v2
         with:
           path: "./..."
 
       - name: Run Gosec Security Scanner
-        uses: securego/gosec@master
+        uses: securego/gosec@5eb1d104ef85ff2c905c877eb600e8c1dee33a22 # v2.30.0
         with:
           args: ./...
         env:
